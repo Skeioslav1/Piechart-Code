@@ -13,24 +13,21 @@
 
       function drawChart() {
         try {
-          // Extract JSON data from the WebView URL
           var jsonData = getQueryParam("data");
           if (!jsonData) throw "No data found in URL.";
 
-          var parsedData = JSON.parse(decodeURIComponent(jsonData)); // Decode and parse JSON
+          var parsedData = JSON.parse(decodeURIComponent(jsonData));
 
-          // Convert JSON to Google Charts format
           var data = [['Plan', 'Count']];
           parsedData.forEach(item => {
             data.push([item.Plan, item.Count]);
           });
 
-          // Load data into Google Charts
           var dataTable = google.visualization.arrayToDataTable(data);
+
           var options = {
-            title: 'Subscription Plans',
-            pieHole: 0.4, // Donut chart style
-            chartArea: { width: '90%', height: '80%' },
+            pieHole: 0, // Full pie chart (not donut)
+            chartArea: { width: '90%', height: '90%' } // Best size for 500px chart
           };
 
           var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -42,7 +39,6 @@
     </script>
   </head>
   <body>
-    <div id="piechart" style="width: 100%; height: 400px;"></div>
+    <div id="piechart" style="width: 500px; height: 500px;"></div>
   </body>
 </html>
-
