@@ -28,23 +28,41 @@
           var options = {
             chartArea: { width: "90%", height: "90%" }, // Optimized for 500px chart
             pieHole: 0, // Full pie chart
-            pieSliceText: "label", // Show the plan name (GOLD, SILVER, etc.)
-            pieSliceTextStyle: {
-              fontSize: 14, // Set text size to 14px
-              bold: true
-            },
-            slices: {}, // This will be updated dynamically for better contrast
             tooltip: { text: "percentage" }, // Show percentage in tooltip
             legend: "none", // Remove legend
+            backgroundColor: "transparent",
           };
 
-          // Customize slice colors for better contrast
-          var colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33a8", "#f4c542"];
-          parsedData.forEach((item, index) => {
-            options.slices[index] = { textStyle: { fontSize: 14, color: "#fff" } }; // White text inside slices
+          var chart = new google.visualization.PieChart(document.getElementById("piechart"));
+
+          google.visualization.events.addListener(chart, "ready", function () {
+            var labels = document.getElementById("labels");
+            labels.innerHTML = ""; // Clear existing labels
+
+            var chartLayout = chart.getChartLayoutInterface();
+            var sliceData = dataTable.getDistinctValues(0); // Get Plan Names
+
+            // Get total count for percentage calculation
+            var totalCount = parsedData.reduce((sum, item) => sum + item.Count, 0);
+
+            parsedData.forEach((item, index) => {
+              var sliceBounds = chartLayout.getBoundingBox("slice#" + index);
+              var percentage = ((item.Count / totalCount) * 100).toFixed(1) + "%";
+
+              var label = document.createElement("div");
+              label.style.position = "absolute";
+              label.style.left = sliceBounds.left + sliceBounds.width / 2 - 20 + "px";
+              label.style.top = sliceBounds.top + sliceBounds.height / 2 - 10 + "px";
+              label.style.fontSize = "14px";
+              label.style.color = "white";
+              label.style.fontWeight = "bold";
+              label.style.textAlign = "center";
+              label.style.width = "50px";
+              label.innerHTML = `<div>${item.Plan}</div><div>${percentage}</div>`;
+              labels.appendChild(label);
+            });
           });
 
-          var chart = new google.visualization.PieChart(document.getElementById("piechart"));
           chart.draw(dataTable, options);
         } catch (error) {
           console.error("Error processing chart data:", error);
@@ -52,7 +70,8 @@
       }
     </script>
   </head>
-  <body>
+  <body style="position: relative;">
     <div id="piechart" style="width: 500px; height: 500px;"></div>
+    <div id="labels" style="position: absolute; top: 0; left: 0; width: 500px; height: 500px; pointer-events: none;"></div>
   </body>
 </html>
