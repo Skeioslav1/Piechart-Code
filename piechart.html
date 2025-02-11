@@ -26,23 +26,20 @@
           var dataTable = google.visualization.arrayToDataTable(data);
 
           var options = {
-            chartArea: { width: "90%", height: "90%" }, // Optimized for 500px chart
-            pieHole: 0, // Full pie chart
-            tooltip: { text: "percentage" }, // Show percentage in tooltip
-            legend: "none", // Remove legend
+            chartArea: { width: "90%", height: "90%" },
+            pieHole: 0,
+            tooltip: { text: "percentage" },
+            legend: "none",
             backgroundColor: "transparent",
           };
 
           var chart = new google.visualization.PieChart(document.getElementById("piechart"));
 
           google.visualization.events.addListener(chart, "ready", function () {
-            var labels = document.getElementById("labels");
-            labels.innerHTML = ""; // Clear existing labels
+            var labelsContainer = document.getElementById("labels");
+            labelsContainer.innerHTML = ""; // Clear previous labels
 
             var chartLayout = chart.getChartLayoutInterface();
-            var sliceData = dataTable.getDistinctValues(0); // Get Plan Names
-
-            // Get total count for percentage calculation
             var totalCount = parsedData.reduce((sum, item) => sum + item.Count, 0);
 
             parsedData.forEach((item, index) => {
@@ -51,15 +48,16 @@
 
               var label = document.createElement("div");
               label.style.position = "absolute";
-              label.style.left = sliceBounds.left + sliceBounds.width / 2 - 20 + "px";
-              label.style.top = sliceBounds.top + sliceBounds.height / 2 - 10 + "px";
+              label.style.left = sliceBounds.left + sliceBounds.width / 2 - 30 + "px";
+              label.style.top = sliceBounds.top + sliceBounds.height / 2 - 20 + "px";
               label.style.fontSize = "14px";
               label.style.color = "white";
               label.style.fontWeight = "bold";
               label.style.textAlign = "center";
-              label.style.width = "50px";
+              label.style.width = "60px";
               label.innerHTML = `<div>${item.Plan}</div><div>${percentage}</div>`;
-              labels.appendChild(label);
+
+              labelsContainer.appendChild(label);
             });
           });
 
