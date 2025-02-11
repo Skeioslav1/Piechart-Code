@@ -26,11 +26,23 @@
           var dataTable = google.visualization.arrayToDataTable(data);
 
           var options = {
-            chartArea: { width: "90%", height: "90%" }, // Optimized for 500px size
-            pieHole: 0, // Full pie chart (not donut)
-            pieSliceText: "percentage", // Show percentage inside the pie
-            legend: "none", // Remove outside legend
+            chartArea: { width: "90%", height: "90%" }, // Optimized for 500px chart
+            pieHole: 0, // Full pie chart
+            pieSliceText: "label", // Show the plan name (GOLD, SILVER, etc.)
+            pieSliceTextStyle: {
+              fontSize: 14, // Set text size to 14px
+              bold: true
+            },
+            slices: {}, // This will be updated dynamically for better contrast
+            tooltip: { text: "percentage" }, // Show percentage in tooltip
+            legend: "none", // Remove legend
           };
+
+          // Customize slice colors for better contrast
+          var colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33a8", "#f4c542"];
+          parsedData.forEach((item, index) => {
+            options.slices[index] = { textStyle: { fontSize: 14, color: "#fff" } }; // White text inside slices
+          });
 
           var chart = new google.visualization.PieChart(document.getElementById("piechart"));
           chart.draw(dataTable, options);
