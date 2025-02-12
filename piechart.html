@@ -30,7 +30,8 @@
             pieHole: 0,
             legend: "none",
             backgroundColor: "transparent",
-            tooltip: { trigger: "none" }, // Disable default tooltip to avoid duplicate %
+            tooltip: { trigger: "none" }, // Disable tooltips to remove duplicate percentage
+            pieSliceText: "none", // Prevent Google Charts from showing % again
           };
 
           var chart = new google.visualization.PieChart(document.getElementById("piechart"));
