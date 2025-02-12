@@ -28,9 +28,9 @@
           var options = {
             chartArea: { width: "90%", height: "90%" },
             pieHole: 0,
-            tooltip: { text: "percentage" },
             legend: "none",
             backgroundColor: "transparent",
+            tooltip: { trigger: "none" }, // Disable default tooltip to avoid duplicate %
           };
 
           var chart = new google.visualization.PieChart(document.getElementById("piechart"));
@@ -55,7 +55,7 @@
               label.style.fontWeight = "bold";
               label.style.textAlign = "center";
               label.style.width = "60px";
-              label.innerHTML = `<div>${item.Plan}</div><div>${percentage}</div>`;
+              label.innerHTML = `<div>${item.Plan}</div><div>${percentage}</div>`; // Plan Name + % Below
 
               labelsContainer.appendChild(label);
             });
